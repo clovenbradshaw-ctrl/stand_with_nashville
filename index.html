@@ -7796,8 +7796,16 @@
             heroTitle: 'Tennessee is under occupation by federal agents from ICE and CBP, and we need your support.',
             heroDescription: 'Across Tennessee, ICE continues to stop, harass, and detain people regardless of their citizenship status.',
             donateUrl: '#',
+            donateText: 'Donate',
             featuredButton1Text: 'Featured GoFundMe',
             featuredButton1Url: '#',
+            heroButton2Text: 'Mutual Aid',
+            heroButton3Text: 'Organizations',
+            // Navigation
+            navItem1Text: 'Mutual Aid',
+            navItem2Text: 'Crowdfunding',
+            navItem3Text: 'Organizations',
+            navItem4Text: 'Connect',
             mutualAidTitle: 'Mutual Aid & Materials',
             mutualAidDescription: 'These funds are administered by neighbors helping their neighbors.',
             crowdfundingTitle: 'Crowdfunding Campaigns',
@@ -7963,7 +7971,15 @@
             heroTitle: 'Hero Title',
             heroDescription: 'Hero Description',
             donateUrl: 'Donate URL',
+            donate: 'Donate Button',
+            donateText: 'Donate Button Text',
             featuredButton1: 'Featured Button',
+            heroButton2Text: 'Hero Button 2',
+            heroButton3Text: 'Hero Button 3',
+            navItem1Text: 'Nav: Mutual Aid',
+            navItem2Text: 'Nav: Crowdfunding',
+            navItem3Text: 'Nav: Organizations',
+            navItem4Text: 'Nav: Connect',
             mutualAidTitle: 'Mutual Aid Title',
             mutualAidDescription: 'Mutual Aid Description',
             crowdfundingTitle: 'Crowdfunding Title',
@@ -8349,11 +8365,11 @@
                 <header class="preview-header" data-block-id="header" data-section-name="Header">
                     <a href="#" class="logo" data-inline-edit="siteName" data-inline-type="text">${escapeHtml(siteData.siteName || 'Stand With Tennessee')}</a>
                     <nav class="nav">
-                        <a href="#mutualaid">Mutual Aid</a>
-                        <a href="#crowdfunding">Crowdfunding</a>
-                        <a href="#orgs">Organizations</a>
-                        <a href="#secure-messaging">Connect</a>
-                        <a href="${escapeHtml(siteData.donateUrl || '#')}" class="public-btn" data-inline-edit="donateUrl" data-inline-type="link">Donate</a>
+                        <a href="#mutualaid" data-inline-edit="navItem1Text" data-inline-type="text">${escapeHtml(siteData.navItem1Text || 'Mutual Aid')}</a>
+                        <a href="#crowdfunding" data-inline-edit="navItem2Text" data-inline-type="text">${escapeHtml(siteData.navItem2Text || 'Crowdfunding')}</a>
+                        <a href="#orgs" data-inline-edit="navItem3Text" data-inline-type="text">${escapeHtml(siteData.navItem3Text || 'Organizations')}</a>
+                        <a href="#secure-messaging" data-inline-edit="navItem4Text" data-inline-type="text">${escapeHtml(siteData.navItem4Text || 'Connect')}</a>
+                        <a href="${escapeHtml(siteData.donateUrl || '#')}" class="public-btn" data-inline-edit="donate" data-inline-type="button" data-inline-text="${escapeHtml(siteData.donateText || 'Donate')}" data-inline-url="${escapeHtml(siteData.donateUrl || '#')}">${escapeHtml(siteData.donateText || 'Donate')}</a>
                     </nav>
                 </header>
 
@@ -8364,8 +8380,8 @@
                         <p data-inline-edit="heroDescription" data-inline-type="text">${escapeHtml(siteData.heroDescription || 'Site description...')}</p>
                         <div class="button-group">
                             <a href="${escapeHtml(siteData.featuredButton1Url || '#')}" class="public-btn" data-inline-edit="featuredButton1" data-inline-type="button" data-inline-text="${escapeHtml(siteData.featuredButton1Text || 'Featured GoFundMe')}" data-inline-url="${escapeHtml(siteData.featuredButton1Url || '#')}">${escapeHtml(siteData.featuredButton1Text || 'Featured GoFundMe')}</a>
-                            <a href="#mutualaid" class="public-btn">Mutual Aid</a>
-                            <a href="#orgs" class="public-btn">Organizations</a>
+                            <a href="#mutualaid" class="public-btn" data-inline-edit="heroButton2Text" data-inline-type="text">${escapeHtml(siteData.heroButton2Text || 'Mutual Aid')}</a>
+                            <a href="#orgs" class="public-btn" data-inline-edit="heroButton3Text" data-inline-type="text">${escapeHtml(siteData.heroButton3Text || 'Organizations')}</a>
                         </div>
                     </div>
                 </section>
