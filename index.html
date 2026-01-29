@@ -2061,6 +2061,151 @@
             resize: vertical;
         }
 
+        /* Enhanced Nav Item Form Styles */
+        .ce-form-section {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .ce-form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .ce-form-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .ce-form-helper {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .ce-form-group.hidden {
+            display: none;
+        }
+
+        .ce-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ce-checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
+
+        .ce-checkbox-item:hover {
+            background: var(--gray-100);
+        }
+
+        .ce-checkbox-item.checked {
+            background: rgba(255, 130, 0, 0.08);
+            border-color: rgba(255, 130, 0, 0.3);
+        }
+
+        .ce-checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            cursor: pointer;
+            accent-color: var(--orange);
+            flex-shrink: 0;
+        }
+
+        .ce-checkbox-content {
+            flex: 1;
+        }
+
+        .ce-checkbox-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-800);
+            display: block;
+        }
+
+        .ce-checkbox-desc {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .ce-url-preview {
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: var(--gray-50);
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: monospace;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ce-url-preview-icon {
+            font-size: 14px;
+        }
+
+        .ce-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .ce-type-badge:hover {
+            transform: translateY(-1px);
+        }
+
+        .ce-type-badge.selected {
+            border-color: var(--orange);
+            box-shadow: 0 2px 8px rgba(255, 130, 0, 0.2);
+        }
+
+        .ce-type-badge[data-type="section"] {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .ce-type-badge[data-type="page"] {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .ce-type-badge[data-type="external"] {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .ce-type-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .ce-form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -7803,7 +7948,211 @@
             ceSelectedItem = null;
         }
 
+        // Specialized Nav Item Form Renderer
+        function ceRenderNavItemForm(item) {
+            const container = document.getElementById('ce-edit-modal-body');
+            const currentId = item.id || null;
+            const linkType = item.link_type || 'section';
+            const title = item.title || '';
+            const url = item.url || '';
+            const parentId = item.parent_id || '';
+            const order = item.order || '';
+            const visible = item.visible !== false;
+            const openNewTab = item.open_new_tab || false;
+
+            // Get parent options (excluding self and descendants)
+            const allNavItems = DB.getAllCurrentStates('nav_items');
+            const descendants = currentId ? getNavDescendants(currentId, allNavItems) : [];
+            const parentOptions = allNavItems.filter(ni =>
+                ni.id !== currentId && !descendants.includes(ni.id)
+            );
+
+            // Type descriptions
+            const typeInfo = {
+                section: { icon: '📑', name: 'Section', desc: 'Links to a section on the page (anchor)' },
+                page: { icon: '📄', name: 'Page', desc: 'Links to an internal page' },
+                external: { icon: '🔗', name: 'External', desc: 'Links to an external website' }
+            };
+
+            // URL placeholder/helper based on type
+            const urlHelpers = {
+                section: { placeholder: '#section-id', helper: 'Use # followed by the section ID (e.g., #about, #contact)' },
+                page: { placeholder: '/page-name', helper: 'Enter the page path (e.g., /about, /contact)' },
+                external: { placeholder: 'https://example.com', helper: 'Enter the full URL including https://' }
+            };
+
+            container.innerHTML = `
+                <!-- Basic Info Section -->
+                <div class="ce-form-section">
+                    <div class="ce-form-section-title">Basic Information</div>
+                    <div class="ce-form-group">
+                        <label>Title *</label>
+                        <input type="text" name="title" value="${escapeHtml(title)}" placeholder="e.g., About Us, Contact">
+                        <div class="ce-form-helper">The text displayed in the navigation menu</div>
+                    </div>
+                </div>
+
+                <!-- Type Section -->
+                <div class="ce-form-section">
+                    <div class="ce-form-section-title">Link Type</div>
+                    <div class="ce-type-selector">
+                        ${Object.entries(typeInfo).map(([type, info]) => `
+                            <div class="ce-type-badge ${linkType === type ? 'selected' : ''}"
+                                 data-type="${type}"
+                                 onclick="ceNavSelectType('${type}')">
+                                <span>${info.icon}</span>
+                                <span>${info.name}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <input type="hidden" name="link_type" value="${linkType}">
+                    <div class="ce-form-helper" id="nav-type-desc">${typeInfo[linkType].desc}</div>
+                </div>
+
+                <!-- URL Section -->
+                <div class="ce-form-section">
+                    <div class="ce-form-section-title">Destination</div>
+                    <div class="ce-form-group">
+                        <label>URL / Anchor</label>
+                        <input type="text" name="url" id="nav-url-input" value="${escapeHtml(url)}"
+                               placeholder="${urlHelpers[linkType].placeholder}"
+                               oninput="ceNavUpdateUrlPreview()">
+                        <div class="ce-form-helper" id="nav-url-helper">${urlHelpers[linkType].helper}</div>
+                    </div>
+                    <div class="ce-url-preview" id="nav-url-preview" style="${url ? '' : 'display: none'}">
+                        <span class="ce-url-preview-icon">${linkType === 'external' ? '🌐' : linkType === 'page' ? '📄' : '⚓'}</span>
+                        <span id="nav-url-preview-text">${url || 'No URL set'}</span>
+                    </div>
+                </div>
+
+                <!-- Hierarchy Section -->
+                <div class="ce-form-section">
+                    <div class="ce-form-section-title">Hierarchy & Order</div>
+                    <div class="ce-form-row">
+                        <div class="ce-form-group">
+                            <label>Parent Item</label>
+                            <select name="parent_id">
+                                <option value="">None (Top Level)</option>
+                                ${parentOptions.map(ni => `
+                                    <option value="${ni.id}" ${parentId === ni.id ? 'selected' : ''}>
+                                        ${escapeHtml(ni.title || 'Untitled')}
+                                    </option>
+                                `).join('')}
+                            </select>
+                            <div class="ce-form-helper">Nest this item under another navigation item</div>
+                        </div>
+                        <div class="ce-form-group">
+                            <label>Display Order</label>
+                            <input type="number" name="order" value="${order}" min="0" placeholder="Auto">
+                            <div class="ce-form-helper">Lower numbers appear first</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Options Section -->
+                <div class="ce-form-section">
+                    <div class="ce-form-section-title">Display Options</div>
+                    <div class="ce-checkbox-group">
+                        <label class="ce-checkbox-item ${visible ? 'checked' : ''}" onclick="ceNavToggleCheckbox(this)">
+                            <input type="checkbox" name="visible" ${visible ? 'checked' : ''}>
+                            <div class="ce-checkbox-content">
+                                <span class="ce-checkbox-label">Visible in Navigation</span>
+                                <span class="ce-checkbox-desc">Show this item in the site navigation menu</span>
+                            </div>
+                        </label>
+                        <label class="ce-checkbox-item ${openNewTab ? 'checked' : ''}" id="nav-new-tab-option"
+                               onclick="ceNavToggleCheckbox(this)" style="${linkType === 'external' ? '' : 'display: none'}">
+                            <input type="checkbox" name="open_new_tab" ${openNewTab ? 'checked' : ''}>
+                            <div class="ce-checkbox-content">
+                                <span class="ce-checkbox-label">Open in New Tab</span>
+                                <span class="ce-checkbox-desc">Opens the link in a new browser tab</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get all descendants of a nav item
+        function getNavDescendants(itemId, allItems) {
+            const descendants = [];
+            const children = allItems.filter(i => i.parent_id === itemId);
+            children.forEach(child => {
+                descendants.push(child.id);
+                descendants.push(...getNavDescendants(child.id, allItems));
+            });
+            return descendants;
+        }
+
+        // Nav form type selector handler
+        function ceNavSelectType(type) {
+            // Update hidden input
+            document.querySelector('[name="link_type"]').value = type;
+
+            // Update type badges
+            document.querySelectorAll('.ce-type-badge').forEach(badge => {
+                badge.classList.toggle('selected', badge.dataset.type === type);
+            });
+
+            // Update description
+            const typeInfo = {
+                section: { icon: '📑', desc: 'Links to a section on the page (anchor)' },
+                page: { icon: '📄', desc: 'Links to an internal page' },
+                external: { icon: '🔗', desc: 'Links to an external website' }
+            };
+            document.getElementById('nav-type-desc').textContent = typeInfo[type].desc;
+
+            // Update URL placeholder and helper
+            const urlHelpers = {
+                section: { placeholder: '#section-id', helper: 'Use # followed by the section ID (e.g., #about, #contact)' },
+                page: { placeholder: '/page-name', helper: 'Enter the page path (e.g., /about, /contact)' },
+                external: { placeholder: 'https://example.com', helper: 'Enter the full URL including https://' }
+            };
+            document.getElementById('nav-url-input').placeholder = urlHelpers[type].placeholder;
+            document.getElementById('nav-url-helper').textContent = urlHelpers[type].helper;
+
+            // Show/hide new tab option (only for external links)
+            const newTabOption = document.getElementById('nav-new-tab-option');
+            if (newTabOption) {
+                newTabOption.style.display = type === 'external' ? '' : 'none';
+            }
+
+            // Update URL preview icon
+            ceNavUpdateUrlPreview();
+        }
+
+        // Nav form URL preview handler
+        function ceNavUpdateUrlPreview() {
+            const url = document.getElementById('nav-url-input').value;
+            const type = document.querySelector('[name="link_type"]').value;
+            const preview = document.getElementById('nav-url-preview');
+            const previewText = document.getElementById('nav-url-preview-text');
+            const previewIcon = preview.querySelector('.ce-url-preview-icon');
+
+            if (url) {
+                preview.style.display = '';
+                previewText.textContent = url;
+                previewIcon.textContent = type === 'external' ? '🌐' : type === 'page' ? '📄' : '⚓';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // Nav form checkbox toggle handler
+        function ceNavToggleCheckbox(label) {
+            const checkbox = label.querySelector('input[type="checkbox"]');
+            // The click event will toggle the checkbox, we just update the visual state
+            setTimeout(() => {
+                label.classList.toggle('checked', checkbox.checked);
+            }, 0);
+        }
+
         function ceRenderModalForm(typeKey, item) {
+            // Use specialized renderer for nav_items
+            if (typeKey === 'nav_items') {
+                return ceRenderNavItemForm(item);
+            }
+
             const type = ceContentTypes[typeKey];
             const container = document.getElementById('ce-edit-modal-body');
 
