@@ -3599,27 +3599,32 @@
     <div id="public-site">
         <header class="header">
             <a href="#" class="logo">
-                <span data-editable="siteName">Stand With Tennessee</span>
+                <span data-editable="siteName">[Site Name]</span>
             </a>
-            <nav class="nav">
-                <a href="#mutualaid">Mutual Aid</a>
-                <a href="#crowdfunding">Crowdfunding</a>
-                <a href="#orgs">Organizations</a>
-                <a href="#secure-messaging">Connect</a>
-                <a href="#" class="public-btn" data-editable="donateUrl" data-editable-attr="href">Donate</a>
+            <nav class="nav" id="main-nav">
+                <!-- Navigation items loaded from database by renderNavigation() -->
+                <a href="#mutualaid" data-editable="navItem1Text">[Nav 1]</a>
+                <a href="#crowdfunding" data-editable="navItem2Text">[Nav 2]</a>
+                <a href="#orgs" data-editable="navItem3Text">[Nav 3]</a>
+                <a href="#secure-messaging" data-editable="navItem4Text">[Nav 4]</a>
+                <a href="#" class="public-btn" data-editable="donateUrl" data-editable-attr="href"><span data-editable="donateText">Donate</span></a>
             </nav>
         </header>
 
         <section class="section section-hero" id="hero">
             <div class="content-wrapper">
-                <h1 data-editable="heroTitle">Tennessee is under occupation by federal agents from ICE and CBP, and we need your support.</h1>
-                <p data-editable="heroDescription">Across Tennessee, ICE continues to stop, harass, and detain people regardless of their citizenship status. Normal life in Tennessee has been interrupted, as schools have been forced to close or go virtual, as people live in fear of leaving their homes or going to work.</p>
+                <h1 data-editable="heroTitle">[Configure hero title in admin panel]</h1>
+                <p data-editable="heroDescription">[Configure hero description in admin panel]</p>
                 <div class="button-group">
                     <a href="#" class="public-btn" data-editable="featuredButton1Url" data-editable-attr="href">
-                        <span data-editable="featuredButton1Text">Featured GoFundMe</span>
+                        <span data-editable="featuredButton1Text">[Featured Link]</span>
                     </a>
-                    <a href="#mutualaid" class="public-btn">Mutual Aid</a>
-                    <a href="#orgs" class="public-btn">Organizations</a>
+                    <a href="#mutualaid" class="public-btn" data-editable="heroButton2Url" data-editable-attr="href">
+                        <span data-editable="heroButton2Text">[Section 1]</span>
+                    </a>
+                    <a href="#orgs" class="public-btn" data-editable="heroButton3Url" data-editable-attr="href">
+                        <span data-editable="heroButton3Text">[Section 2]</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -3633,109 +3638,56 @@
 
         <section class="section section-dark" id="mutualaid">
             <div class="content-wrapper">
-                <h2 data-editable="mutualAidTitle">Mutual Aid & Materials</h2>
-                <p data-editable="mutualAidDescription">These funds are administered by neighbors helping their neighbors. One of the most direct ways to help.</p>
+                <h2 data-editable="mutualAidTitle">[Section Title]</h2>
+                <p data-editable="mutualAidDescription">[Section description - configure in admin panel]</p>
                 <div class="accordion" id="mutualaid-accordion"></div>
             </div>
         </section>
 
         <section class="section section-light" id="crowdfunding">
             <div class="content-wrapper">
-                <h2 data-editable="crowdfundingTitle">Crowdfunding Campaigns</h2>
-                <p data-editable="crowdfundingDescription">Active campaigns that need support. Updated regularly.</p>
+                <h2 data-editable="crowdfundingTitle">[Section Title]</h2>
+                <p data-editable="crowdfundingDescription">[Section description - configure in admin panel]</p>
                 <div class="accordion" id="crowdfunding-accordion"></div>
             </div>
         </section>
 
         <section class="section" id="orgs">
             <div class="content-wrapper">
-                <h2 data-editable="orgsTitle">Organizations On The Ground</h2>
-                <p data-editable="orgsDescription">Organizations doing direct service, jail support, and legal defense work.</p>
+                <h2 data-editable="orgsTitle">[Section Title]</h2>
+                <p data-editable="orgsDescription">[Section description - configure in admin panel]</p>
                 <div class="accordion" id="orgs-accordion"></div>
             </div>
         </section>
 
         <section class="section section-dark" id="secure-messaging">
             <div class="content-wrapper" style="text-align: center;">
-                <h2 data-editable="secureMessagingTitle">Stay Connected Securely</h2>
-                <p data-editable="secureMessagingDescription" style="margin: 0 auto 1.5rem auto;">In times of uncertainty, secure communication is essential. Join our community on Hyphae Network — a decentralized, privacy-focused messaging platform built on Matrix protocol.</p>
+                <h2 data-editable="secureMessagingTitle">[Section Title]</h2>
+                <p data-editable="secureMessagingDescription" style="margin: 0 auto 1.5rem auto;">[Section description - configure in admin panel]</p>
 
                 <div class="secure-recommendations" style="margin: 2.5rem auto; max-width: 700px;">
-                    <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; opacity: 0.9;">Switch to Secure Alternatives</h3>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span style="color: #ef4444; font-weight: bold;">✗</span>
-                                <span style="opacity: 0.6; text-decoration: line-through;">Gmail</span>
-                            </div>
-                            <span style="opacity: 0.4;">→</span>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span style="color: #22c55e; font-weight: bold;">✓</span>
-                                <a href="https://protonmail.com" target="_blank" rel="noopener" style="color: var(--accent-color); font-weight: bold; text-decoration: none;">ProtonMail</a>
-                            </div>
-                            <span style="opacity: 0.5; font-size: 0.85rem; margin-left: 0.5rem;">encrypted email</span>
-                        </div>
-
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span style="color: #ef4444; font-weight: bold;">✗</span>
-                                <span style="opacity: 0.6; text-decoration: line-through;">Slack</span>
-                            </div>
-                            <span style="opacity: 0.4;">→</span>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span style="color: #22c55e; font-weight: bold;">✓</span>
-                                <a href="https://hyphae.social" target="_blank" rel="noopener" style="color: var(--accent-color); font-weight: bold; text-decoration: none;">Hyphae.social</a>
-                            </div>
-                            <span style="opacity: 0.5; font-size: 0.85rem; margin-left: 0.5rem;">team chat</span>
-                        </div>
-
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span style="color: #ef4444; font-weight: bold;">✗</span>
-                                <span style="opacity: 0.6; text-decoration: line-through;">iMessage</span>
-                            </div>
-                            <span style="opacity: 0.4;">→</span>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span style="color: #22c55e; font-weight: bold;">✓</span>
-                                <a href="https://signal.org" target="_blank" rel="noopener" style="color: var(--accent-color); font-weight: bold; text-decoration: none;">Signal</a>
-                            </div>
-                            <span style="opacity: 0.5; font-size: 0.85rem; margin-left: 0.5rem;">personal messaging</span>
-                        </div>
-
+                    <h3 data-editable="secureRecommendationsTitle" style="margin-bottom: 1.5rem; font-size: 1.1rem; opacity: 0.9;">Recommended Alternatives</h3>
+                    <div id="secure-links-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Secure links are rendered dynamically from database by renderSecureLinks() -->
                     </div>
                 </div>
 
-                <div class="messaging-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 2rem 0; text-align: center;">
-                    <div class="feature">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔐</div>
-                        <strong>End-to-End Encrypted</strong>
-                        <p style="font-size: 0.9rem; opacity: 0.9;">Your messages stay private</p>
-                    </div>
-                    <div class="feature">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
-                        <strong>Decentralized</strong>
-                        <p style="font-size: 0.9rem; opacity: 0.9;">No single point of control</p>
-                    </div>
-                    <div class="feature">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📱</div>
-                        <strong>Works Everywhere</strong>
-                        <p style="font-size: 0.9rem; opacity: 0.9;">Use Element, FluffyChat, or any Matrix app</p>
-                    </div>
+                <div class="messaging-features" id="messaging-features-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 2rem 0; text-align: center;">
+                    <!-- Features are rendered dynamically from database by renderSecureFeatures() -->
                 </div>
 
                 <div class="button-group" style="justify-content: center;">
-                    <a href="https://hyphae.social" target="_blank" rel="noopener" class="public-btn" style="background: var(--accent-color); border-color: var(--accent-color);" data-editable="secureMessagingButtonUrl" data-editable-attr="href">
-                        <span data-editable="secureMessagingButtonText">Join the Network →</span>
+                    <a href="#" target="_blank" rel="noopener" class="public-btn" style="background: var(--accent-color); border-color: var(--accent-color);" data-editable="secureMessagingButtonUrl" data-editable-attr="href">
+                        <span data-editable="secureMessagingButtonText">Learn More</span>
                     </a>
                 </div>
-                <p style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.8;">One account works with ANY Matrix app. New to Matrix? Hyphae has a quick 2-minute setup guide.</p>
+                <p data-editable="secureMessagingFootnote" style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.8;">[Additional information - configure in admin panel]</p>
             </div>
         </section>
 
         <footer class="footer">
-            <p data-editable="footerText">This directory is an independent project. We are not raising or distributing any funds.</p>
-            <p>Questions? <a href="mailto:contact@standwithtennessee.org" data-editable="contactEmail" data-editable-attr="href,text">contact@standwithtennessee.org</a></p>
+            <p data-editable="footerText">[Footer text - configure in admin panel]</p>
+            <p>Questions? <a href="mailto:contact@example.org" data-editable="contactEmail" data-editable-attr="href,text">contact@example.org</a></p>
         </footer>
     </div>
 
@@ -5193,13 +5145,45 @@
                                 <div class="ce-form-row">
                                     <div class="ce-form-group">
                                         <label>Featured Button Text</label>
-                                        <input type="text" id="ce-setting-featuredButton1Text" placeholder="Featured GoFundMe">
+                                        <input type="text" id="ce-setting-featuredButton1Text" placeholder="Featured Link">
                                     </div>
                                     <div class="ce-form-group">
                                         <label>Featured Button URL</label>
                                         <input type="url" id="ce-setting-featuredButton1Url" placeholder="https://...">
                                     </div>
                                 </div>
+                                <div class="ce-form-row">
+                                    <div class="ce-form-group">
+                                        <label>Hero Button 2 Text</label>
+                                        <input type="text" id="ce-setting-heroButton2Text" placeholder="Section 1">
+                                    </div>
+                                    <div class="ce-form-group">
+                                        <label>Hero Button 2 URL</label>
+                                        <input type="text" id="ce-setting-heroButton2Url" placeholder="#mutualaid">
+                                    </div>
+                                </div>
+                                <div class="ce-form-row">
+                                    <div class="ce-form-group">
+                                        <label>Hero Button 3 Text</label>
+                                        <input type="text" id="ce-setting-heroButton3Text" placeholder="Section 2">
+                                    </div>
+                                    <div class="ce-form-group">
+                                        <label>Hero Button 3 URL</label>
+                                        <input type="text" id="ce-setting-heroButton3Url" placeholder="#orgs">
+                                    </div>
+                                </div>
+                                <div class="ce-form-row">
+                                    <div class="ce-form-group">
+                                        <label>Donate Text</label>
+                                        <input type="text" id="ce-setting-donateText" placeholder="Donate">
+                                    </div>
+                                    <div class="ce-form-group">
+                                        <label>Navigation Items</label>
+                                        <small style="color: var(--gray-500);">Edit navigation in the Navigation tab</small>
+                                    </div>
+                                </div>
+                                <hr style="margin: 16px 0; border-color: var(--gray-200);">
+                                <h5 style="margin-bottom: 12px;">Section Titles</h5>
                                 <div class="ce-form-group">
                                     <label>Mutual Aid Section Title</label>
                                     <input type="text" id="ce-setting-mutualAidTitle" placeholder="Mutual Aid & Materials">
@@ -5226,15 +5210,40 @@
                                 </div>
                                 <div class="ce-form-group">
                                     <label>Secure Messaging Title</label>
-                                    <input type="text" id="ce-setting-secureMessagingTitle">
+                                    <input type="text" id="ce-setting-secureMessagingTitle" placeholder="Stay Connected Securely">
                                 </div>
                                 <div class="ce-form-group">
                                     <label>Secure Messaging Description</label>
-                                    <textarea id="ce-setting-secureMessagingDescription"></textarea>
+                                    <textarea id="ce-setting-secureMessagingDescription" placeholder="Description for the secure messaging section..."></textarea>
+                                </div>
+                                <div class="ce-form-group">
+                                    <label>Recommendations Title</label>
+                                    <input type="text" id="ce-setting-secureRecommendationsTitle" placeholder="Recommended Alternatives">
+                                </div>
+                                <div class="ce-form-row">
+                                    <div class="ce-form-group">
+                                        <label>Main Button Text</label>
+                                        <input type="text" id="ce-setting-secureMessagingButtonText" placeholder="Learn More">
+                                    </div>
+                                    <div class="ce-form-group">
+                                        <label>Main Button URL</label>
+                                        <input type="url" id="ce-setting-secureMessagingButtonUrl" placeholder="https://...">
+                                    </div>
+                                </div>
+                                <div class="ce-form-group">
+                                    <label>Footnote</label>
+                                    <textarea id="ce-setting-secureMessagingFootnote" placeholder="Additional information..."></textarea>
+                                </div>
+                                <p style="font-size: 12px; color: var(--gray-500); margin: 8px 0;">Note: Secure links and features are managed in the Content tab under "Secure Alternatives" and "Security Features".</p>
+                                <hr style="margin: 16px 0; border-color: var(--gray-200);">
+                                <h5 style="margin-bottom: 12px;">Footer</h5>
+                                <div class="ce-form-group">
+                                    <label>Footer Text</label>
+                                    <textarea id="ce-setting-footerText" placeholder="Footer text..."></textarea>
                                 </div>
                                 <div class="ce-form-group">
                                     <label>Contact Email</label>
-                                    <input type="email" id="ce-setting-contactEmail">
+                                    <input type="email" id="ce-setting-contactEmail" placeholder="contact@example.org">
                                 </div>
                                 <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="ceSaveSettings()">
                                     Save Settings
@@ -5993,73 +6002,19 @@
         };
 
         // ============================================
-        // SEED DATA (if empty)
+        // DATABASE INITIALIZATION (no hardcoded seed data)
         // ============================================
+        // All content is loaded from the database.
+        // If the database is empty, the site will show empty sections.
+        // Admins can add content through the Content Editor.
 
-        function seedDatabase() {
-            if (DB.events.length > 0) return;
-
-            // Languages
-            const languages = [
-                { code: 'en', name: 'English', native_name: 'English' },
-                { code: 'es', name: 'Spanish', native_name: 'Español' },
-                { code: 'ar', name: 'Arabic', native_name: 'العربية' },
-                { code: 'ku', name: 'Kurdish', native_name: 'Kurdî' },
-                { code: 'so', name: 'Somali', native_name: 'Soomaali' }
-            ];
-            languages.forEach(l => DB.insRecord('languages', l, l.code));
-
-            // Regions
-            const regions = [
-                { name: 'Statewide', type: 'statewide', counties: [] },
-                { name: 'Nashville Metro', type: 'metro', counties: ['Davidson', 'Williamson', 'Rutherford'] },
-                { name: 'Memphis Metro', type: 'metro', counties: ['Shelby', 'Tipton'] },
-                { name: 'East Tennessee', type: 'multi_county', counties: ['Knox', 'Hamilton'] }
-            ];
-            regions.forEach(r => DB.insRecord('regions', r, r.name.toLowerCase().replace(/\s+/g, '-')));
-
-            // Service Types
-            const services = [
-                { name: 'Legal', parent_id: null },
-                { name: 'Immigration Legal Services', parent_id: 'legal' },
-                { name: 'Know Your Rights', parent_id: 'legal' },
-                { name: 'Food', parent_id: null },
-                { name: 'Food Pantry', parent_id: 'food' },
-                { name: 'Hot Meals', parent_id: 'food' },
-                { name: 'Housing', parent_id: null },
-                { name: 'Rent Assistance', parent_id: 'housing' },
-                { name: 'Emergency Shelter', parent_id: 'housing' }
-            ];
-            services.forEach(s => DB.insRecord('services', s, s.name.toLowerCase().replace(/\s+/g, '-')));
-
-            // Sample Organizations
-            const orgs = [
-                { name: 'Conexión Américas', organization_type: 'nonprofit', description: 'Comprehensive services for immigrants in Nashville', status: 'verified', service_types: ['legal', 'education'] },
-                { name: 'Latino Memphis', organization_type: 'nonprofit', description: 'Supporting the Latino community in Memphis', status: 'verified', service_types: ['legal', 'food'] },
-                { name: 'Bridge Refugee Services', organization_type: 'nonprofit', description: 'Refugee resettlement in East Tennessee', status: 'verified', service_types: ['resettlement'] },
-                { name: 'Community Food Pantry', organization_type: 'mutual_aid', description: 'Weekly food distribution', status: 'pending', service_types: ['food-pantry'] }
-            ];
-            orgs.forEach(o => DB.insRecord('organizations', o));
-
-            // Sample Campaigns
-            const campaigns = [
-                { title: 'Help Maria\'s Family', platform: 'gofundme', external_url: 'https://gofundme.com/example1', campaign_type: 'individual_family', status: 'active', description: 'Supporting a family facing deportation' },
-                { title: 'Bond Fund for Memphis', platform: 'givebutter', external_url: 'https://givebutter.com/example2', campaign_type: 'bond_fund', status: 'active', description: 'Community bond fund' },
-                { title: 'Emergency Legal Fund', platform: 'paypal', external_url: 'https://paypal.me/example3', campaign_type: 'legal_fund', status: 'goal_met', description: 'Legal defense fund' }
-            ];
-            campaigns.forEach(c => DB.insRecord('campaigns', c));
-
-            // Sample Submissions
-            const submissions = [
-                { entity_type: 'organization', raw_data: { name: 'Casa de la Comunidad', type: 'Mutual Aid' }, submitter_email: 'maria@email.com', submitter_relation: 'I volunteer here', status: 'pending' },
-                { entity_type: 'campaign', raw_data: { title: 'Help the Garcia Family', platform: 'GoFundMe' }, submitter_email: 'friend@email.com', submitter_relation: 'Family friend', status: 'pending' }
-            ];
-            submissions.forEach(s => DB.insRecord('submissions', s));
-
-            console.log('Database seeded with sample data');
+        function initializeDatabase() {
+            // No hardcoded seed data - all content comes from database
+            // The site will show empty sections until content is added via admin panel
+            console.log('Database initialized - content loaded from API');
         }
 
-        seedDatabase();
+        initializeDatabase();
 
         // ============================================
         // LOGIN SYSTEM (Esc x3)
@@ -7100,6 +7055,10 @@
             // Render featured content from API (articles with featured images)
             renderFeaturedContent();
 
+            // Render secure messaging section content from database
+            renderSecureLinks();
+            renderSecureFeatures();
+
             // Apply site config from API via DB.getSiteData()
             const siteData = DB.getSiteData() || {};
             Object.keys(siteData).forEach(key => {
@@ -7162,6 +7121,65 @@
                     `).join('')}
                 </div>
             `;
+        }
+
+        // Render secure messaging links from database
+        function renderSecureLinks() {
+            const container = document.getElementById('secure-links-container');
+            if (!container) return;
+
+            // Get secure links from database
+            const secureLinks = DB.getAllCurrentStates('secure_links').filter(l => l.status !== 'deleted');
+
+            if (secureLinks.length === 0) {
+                // Show placeholder if no links configured
+                container.innerHTML = '<p style="opacity: 0.7;">No secure alternatives configured yet. Add them in the admin panel.</p>';
+                return;
+            }
+
+            // Sort by order if available
+            secureLinks.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            container.innerHTML = secureLinks.map(link => `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #ef4444; font-weight: bold;">✗</span>
+                        <span style="opacity: 0.6; text-decoration: line-through;">${escapeHtml(link.replaces_name || 'Service')}</span>
+                    </div>
+                    <span style="opacity: 0.4;">→</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #22c55e; font-weight: bold;">✓</span>
+                        <a href="${escapeHtml(link.url || '#')}" target="_blank" rel="noopener" style="color: var(--accent-color); font-weight: bold; text-decoration: none;">${escapeHtml(link.name)}</a>
+                    </div>
+                    <span style="opacity: 0.5; font-size: 0.85rem; margin-left: 0.5rem;">${escapeHtml(link.description || '')}</span>
+                </div>
+            `).join('');
+        }
+
+        // Render secure messaging features from database
+        function renderSecureFeatures() {
+            const container = document.getElementById('messaging-features-container');
+            if (!container) return;
+
+            // Get secure features from database
+            const secureFeatures = DB.getAllCurrentStates('secure_features').filter(f => f.status !== 'deleted');
+
+            if (secureFeatures.length === 0) {
+                // Show placeholder if no features configured
+                container.innerHTML = '<p style="opacity: 0.7;">No features configured yet. Add them in the admin panel.</p>';
+                return;
+            }
+
+            // Sort by order if available
+            secureFeatures.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            container.innerHTML = secureFeatures.map(feature => `
+                <div class="feature">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">${escapeHtml(feature.icon || '✓')}</div>
+                    <strong>${escapeHtml(feature.title)}</strong>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">${escapeHtml(feature.description || '')}</p>
+                </div>
+            `).join('');
         }
 
         function initAccordions() {
@@ -7799,6 +7817,78 @@
                     { name: 'open_new_tab', label: 'Open in New Tab', type: 'checkbox' }
                 ],
                 tableColumns: ['title', 'link_type', 'visible']
+            },
+            secure_links: {
+                name: 'Secure Alternatives',
+                description: 'Secure messaging/service alternatives (shown in Connect section)',
+                icon: '🔒',
+                fields: [
+                    { name: 'name', label: 'Service Name', type: 'text', required: true },
+                    { name: 'url', label: 'Service URL', type: 'url', required: true },
+                    { name: 'replaces_name', label: 'Replaces (insecure service)', type: 'text' },
+                    { name: 'description', label: 'Short Description', type: 'text' },
+                    { name: 'order', label: 'Display Order', type: 'number' },
+                    { name: 'status', label: 'Status', type: 'select', options: ['active', 'draft', 'deleted'] }
+                ],
+                tableColumns: ['name', 'replaces_name', 'status']
+            },
+            secure_features: {
+                name: 'Security Features',
+                description: 'Feature highlights for secure messaging section',
+                icon: '✨',
+                fields: [
+                    { name: 'title', label: 'Feature Title', type: 'text', required: true },
+                    { name: 'description', label: 'Description', type: 'text' },
+                    { name: 'icon', label: 'Emoji Icon', type: 'text' },
+                    { name: 'order', label: 'Display Order', type: 'number' },
+                    { name: 'status', label: 'Status', type: 'select', options: ['active', 'draft', 'deleted'] }
+                ],
+                tableColumns: ['title', 'icon', 'status']
+            },
+            languages: {
+                name: 'Languages',
+                description: 'Supported languages for the site',
+                icon: '🌐',
+                fields: [
+                    { name: 'code', label: 'Language Code', type: 'text', required: true },
+                    { name: 'name', label: 'English Name', type: 'text', required: true },
+                    { name: 'native_name', label: 'Native Name', type: 'text' }
+                ],
+                tableColumns: ['code', 'name', 'native_name']
+            },
+            regions: {
+                name: 'Regions',
+                description: 'Geographic regions and counties',
+                icon: '📍',
+                fields: [
+                    { name: 'name', label: 'Region Name', type: 'text', required: true },
+                    { name: 'type', label: 'Type', type: 'select', options: ['statewide', 'metro', 'county', 'multi_county'] },
+                    { name: 'counties', label: 'Counties (comma-separated)', type: 'text' }
+                ],
+                tableColumns: ['name', 'type']
+            },
+            services: {
+                name: 'Service Types',
+                description: 'Categories of services offered',
+                icon: '🏷️',
+                fields: [
+                    { name: 'name', label: 'Service Name', type: 'text', required: true },
+                    { name: 'parent_id', label: 'Parent Category', type: 'relation', relation: 'services' },
+                    { name: 'description', label: 'Description', type: 'textarea' }
+                ],
+                tableColumns: ['name', 'parent_id']
+            },
+            theme_presets: {
+                name: 'Theme Presets',
+                description: 'Color and style presets for the site theme',
+                icon: '🎨',
+                fields: [
+                    { name: 'name', label: 'Preset Name', type: 'text', required: true },
+                    { name: 'description', label: 'Description', type: 'text' },
+                    { name: 'values', label: 'Theme Values (JSON)', type: 'textarea' },
+                    { name: 'status', label: 'Status', type: 'select', options: ['active', 'draft'] }
+                ],
+                tableColumns: ['name', 'status']
             }
         };
 
@@ -8528,31 +8618,45 @@
             });
         }
 
-        // Settings
+        // Settings - Minimal fallbacks only. Actual content is loaded from database.
+        // These are shown only if the database has no content configured.
         const ceSettingsDefaults = {
-            siteName: 'Stand With Tennessee',
-            heroTitle: 'Tennessee is under occupation by federal agents from ICE and CBP, and we need your support.',
-            heroDescription: 'Across Tennessee, ICE continues to stop, harass, and detain people regardless of their citizenship status.',
+            // Site Identity - minimal fallback
+            siteName: 'Site Name',
+            // Hero Section - placeholders prompting admin to set content
+            heroTitle: '[Configure hero title in admin panel]',
+            heroDescription: '[Configure hero description in admin panel]',
+            // Buttons
             donateUrl: '#',
             donateText: 'Donate',
-            featuredButton1Text: 'Featured GoFundMe',
+            featuredButton1Text: 'Featured Link',
             featuredButton1Url: '#',
-            heroButton2Text: 'Mutual Aid',
-            heroButton3Text: 'Organizations',
-            // Navigation
-            navItem1Text: 'Mutual Aid',
-            navItem2Text: 'Crowdfunding',
-            navItem3Text: 'Organizations',
-            navItem4Text: 'Connect',
-            mutualAidTitle: 'Mutual Aid & Materials',
-            mutualAidDescription: 'These funds are administered by neighbors helping their neighbors.',
-            crowdfundingTitle: 'Crowdfunding Campaigns',
-            crowdfundingDescription: 'Active campaigns that need support. Updated regularly.',
-            orgsTitle: 'Organizations On The Ground',
-            orgsDescription: 'Organizations doing direct service, jail support, and legal defense work.',
-            secureMessagingTitle: 'Stay Connected Securely',
-            secureMessagingDescription: 'In times of uncertainty, secure communication is essential.',
-            contactEmail: 'contact@standwithtennessee.org'
+            heroButton2Text: 'Section 1',
+            heroButton2Url: '#mutualaid',
+            heroButton3Text: 'Section 2',
+            heroButton3Url: '#orgs',
+            // Navigation - placeholders
+            navItem1Text: 'Section 1',
+            navItem2Text: 'Section 2',
+            navItem3Text: 'Section 3',
+            navItem4Text: 'Section 4',
+            // Section Titles - placeholders
+            mutualAidTitle: '[Section Title]',
+            mutualAidDescription: '[Section description - configure in admin panel]',
+            crowdfundingTitle: '[Section Title]',
+            crowdfundingDescription: '[Section description - configure in admin panel]',
+            orgsTitle: '[Section Title]',
+            orgsDescription: '[Section description - configure in admin panel]',
+            secureMessagingTitle: '[Section Title]',
+            secureMessagingDescription: '[Section description - configure in admin panel]',
+            // Secure Messaging Section
+            secureMessagingButtonText: 'Learn More',
+            secureMessagingButtonUrl: '#',
+            secureRecommendationsTitle: 'Recommended Alternatives',
+            secureMessagingFootnote: '[Additional information - configure in admin panel]',
+            // Footer
+            footerText: '[Footer text - configure in admin panel]',
+            contactEmail: 'contact@example.org'
         };
 
         // Get current settings from form inputs (for live preview)
@@ -9686,41 +9790,42 @@
         // STYLE MANAGER - Theme System
         // ============================================
 
-        // Default theme values
+        // Default theme values - Minimal fallbacks only
+        // Actual theme is loaded from database via getSiteTheme()
         const smDefaultTheme = {
-            // Colors
-            'theme-primary': '#1a1a1a',
+            // Colors - neutral fallbacks
+            'theme-primary': '#333333',
             'theme-secondary': '#ffffff',
-            'theme-accent': '#c8102e',
+            'theme-accent': '#0066cc',
             'theme-background': '#ffffff',
             'theme-surface': '#f5f5f5',
             'theme-text': '#333333',
             'theme-text-muted': '#666666',
             'theme-border': '#e5e5e5',
-            'theme-link': '#c8102e',
-            'theme-link-hover': '#a00d24',
-            // Palette - sensible defaults
-            'palette-1': '#1a1a1a',   // Black - primary text
-            'palette-2': '#ffffff',   // White - backgrounds
-            'palette-3': '#c8102e',   // Red - accent/CTA
-            'palette-4': '#2563eb',   // Blue - links
-            'palette-5': '#16a34a',   // Green - success
-            // Typography
+            'theme-link': '#0066cc',
+            'theme-link-hover': '#004499',
+            // Palette - neutral
+            'palette-1': '#333333',
+            'palette-2': '#ffffff',
+            'palette-3': '#0066cc',
+            'palette-4': '#2563eb',
+            'palette-5': '#16a34a',
+            // Typography - system fonts
             'font-heading': "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
             'font-body': "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
             'text-base-size': '16px',
             'text-scale-ratio': '1.25',
             'line-height-normal': '1.6',
             // Buttons
-            'btn-border-radius': '0px',
+            'btn-border-radius': '4px',
             'btn-border-width': '2px',
             'btn-padding-x': '1.5rem',
             'btn-padding-y': '0.75rem',
             'btn-font-weight': '600',
             'btn-text-transform': 'none',
-            'btn-primary-bg': '#1a1a1a',
+            'btn-primary-bg': '#333333',
             'btn-primary-text': '#ffffff',
-            'btn-primary-border': '#1a1a1a',
+            'btn-primary-border': '#333333',
             // Spacing
             'space-unit': '8px',
             'section-padding': '4vw',
@@ -9728,12 +9833,12 @@
             'content-max-width': '1200px',
             // Header
             'header-bg': '#ffffff',
-            'header-text': '#1a1a1a',
+            'header-text': '#333333',
             'header-height': '72px',
             'header-position': 'fixed',
             'header-border': '1px solid var(--theme-border)',
             // Footer
-            'footer-bg': '#c8102e',
+            'footer-bg': '#333333',
             'footer-text': '#ffffff',
             // Effects
             'border-radius-sm': '4px',
@@ -9743,55 +9848,42 @@
             'transition-normal': '0.2s ease',
             // Sections
             'section-light-bg': '#f5f5f5',
-            'section-dark-bg': '#1a1a1a',
+            'section-dark-bg': '#333333',
             'section-dark-text': '#ffffff'
         };
 
-        // Theme presets
-        const smThemePresets = {
-            default: {
-                'theme-primary': '#1a1a1a',
-                'theme-secondary': '#ffffff',
-                'theme-accent': '#c8102e',
-                'theme-background': '#ffffff',
-                'theme-text': '#333333',
-                'btn-primary-bg': '#1a1a1a',
-                'btn-primary-text': '#ffffff',
-                'footer-bg': '#c8102e',
-                'section-dark-bg': '#1a1a1a'
-            },
-            dark: {
-                'theme-primary': '#ffffff',
-                'theme-secondary': '#1a1a1a',
-                'theme-accent': '#ff6b35',
-                'theme-background': '#1a1a1a',
-                'theme-text': '#e5e5e5',
-                'btn-primary-bg': '#ffffff',
-                'btn-primary-text': '#1a1a1a',
-                'footer-bg': '#ff6b35',
-                'section-dark-bg': '#0d0d0d',
-                'section-light-bg': '#2a2a2a'
-            },
-            warm: {
-                'theme-primary': '#2d3436',
-                'theme-secondary': '#ffeaa7',
-                'theme-accent': '#e17055',
-                'theme-background': '#ffeaa7',
-                'theme-text': '#2d3436',
-                'btn-primary-bg': '#2d3436',
-                'btn-primary-text': '#ffeaa7',
-                'footer-bg': '#e17055',
-                'section-dark-bg': '#2d3436',
-                'section-light-bg': '#fff3cd'
+        // Theme presets - loaded from database
+        // This is just a fallback structure if database is empty
+        let smThemePresets = {};
+
+        // Load theme presets from database
+        async function loadThemePresets() {
+            const presets = DB.getAllCurrentStates('theme_presets').filter(p => p.status === 'active');
+            if (presets.length > 0) {
+                smThemePresets = {};
+                presets.forEach(preset => {
+                    try {
+                        smThemePresets[preset.name] = typeof preset.values === 'string'
+                            ? JSON.parse(preset.values)
+                            : preset.values;
+                    } catch (e) {
+                        console.error('Error parsing theme preset:', preset.name, e);
+                    }
+                });
             }
-        };
+            return smThemePresets;
+        }
 
         // Current theme state
         let smCurrentTheme = { ...smDefaultTheme };
         let smUnsavedChanges = false;
 
         // Load theme from API via DB.getSiteTheme()
-        function smLoadTheme() {
+        async function smLoadTheme() {
+            // Load theme presets from database
+            await loadThemePresets();
+
+            // Load current theme from API
             const savedTheme = DB.getSiteTheme();
             if (savedTheme && Object.keys(savedTheme).length > 0) {
                 try {
