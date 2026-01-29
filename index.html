@@ -4544,6 +4544,158 @@
             min-height: 60px;
         }
 
+        /* SortableJS Ghost/Drag Classes */
+        .canvas-sortable-ghost {
+            opacity: 0.4;
+            background: rgba(233, 69, 96, 0.2) !important;
+            outline: 2px dashed #e94560 !important;
+        }
+
+        .canvas-sortable-chosen {
+            outline: 2px solid #e94560 !important;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        }
+
+        .canvas-sortable-drag {
+            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Drop Indicators */
+        .canvas-drop-indicator {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+            margin: 8px 20px;
+            border-radius: 2px;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .canvas-dragging .canvas-drop-indicator {
+            opacity: 1;
+        }
+
+        .canvas-drop-indicator span {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #e94560;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+            opacity: 0;
+        }
+
+        .canvas-drop-indicator:hover span {
+            opacity: 1;
+        }
+
+        /* Block being dragged from palette */
+        .canvas-block-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Empty canvas state */
+        .canvas-frame:empty::before {
+            content: 'Drag blocks here to start building';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            color: #94a3b8;
+            font-size: 16px;
+            border: 2px dashed #334155;
+            margin: 20px;
+            border-radius: 8px;
+        }
+
+        /* Block hover toolbar */
+        .canvas-frame [data-canvas-block]:hover::after {
+            content: '⋮⋮';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(233, 69, 96, 0.9);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: grab;
+            z-index: 100;
+        }
+
+        .canvas-frame [data-canvas-block].selected::after {
+            content: '⋮⋮ Drag to move';
+            background: #e94560;
+        }
+
+        /* Palette Drop Zones */
+        .canvas-palette-drop-zone {
+            height: 8px;
+            margin: 4px 10px;
+            background: transparent;
+            border: 2px dashed transparent;
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .canvas-palette-drop-zone.active {
+            height: 60px;
+            background: rgba(233, 69, 96, 0.1);
+            border-color: #e94560;
+        }
+
+        .canvas-palette-drop-zone span {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #e94560;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .canvas-palette-drop-zone.active span {
+            opacity: 1;
+        }
+
+        /* Add Block Button (appears on hover between blocks) */
+        .canvas-add-block-btn {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 28px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 100;
+        }
+
+        .canvas-frame [data-canvas-block]:hover + .canvas-add-block-btn,
+        .canvas-add-block-btn:hover {
+            opacity: 1;
+        }
+
         /* Right Panel - Properties */
         .canvas-properties-panel {
             width: 300px;
@@ -12989,8 +13141,69 @@
             // Make blocks selectable and editable
             makeBlocksSelectable(frame);
 
+            // Initialize SortableJS for block reordering within canvas
+            initializeCanvasSortable();
+
             // Save initial state for undo
             saveCanvasState();
+        }
+
+        // Initialize SortableJS for drag reordering within canvas
+        function initializeCanvasSortable() {
+            const canvasFrame = document.getElementById('canvas-frame');
+            if (!canvasFrame || typeof Sortable === 'undefined') return;
+
+            // Make sections and blocks sortable
+            Sortable.create(canvasFrame, {
+                animation: 200,
+                ghostClass: 'canvas-sortable-ghost',
+                chosenClass: 'canvas-sortable-chosen',
+                dragClass: 'canvas-sortable-drag',
+                filter: '[contenteditable="true"]', // Don't drag while editing text
+                preventOnFilter: false,
+                draggable: '[data-canvas-block]',
+                handle: '[data-canvas-block]',
+                onStart: function(evt) {
+                    document.body.classList.add('canvas-dragging');
+                    showDropIndicators();
+                },
+                onEnd: function(evt) {
+                    document.body.classList.remove('canvas-dragging');
+                    hideDropIndicators();
+                    if (evt.oldIndex !== evt.newIndex) {
+                        saveCanvasState();
+                        ceShowToast('Block reordered', 'success');
+                    }
+                }
+            });
+        }
+
+        // Show drop zone indicators
+        function showDropIndicators() {
+            const frame = document.getElementById('canvas-frame');
+            const blocks = frame.querySelectorAll('[data-canvas-block]');
+
+            // Add drop indicators between blocks
+            blocks.forEach((block, index) => {
+                if (!block.previousElementSibling?.classList.contains('canvas-drop-indicator')) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'canvas-drop-indicator';
+                    indicator.innerHTML = '<span>Drop here</span>';
+                    block.before(indicator);
+                }
+            });
+
+            // Add one at the end
+            const lastIndicator = document.createElement('div');
+            lastIndicator.className = 'canvas-drop-indicator';
+            lastIndicator.innerHTML = '<span>Drop here</span>';
+            frame.appendChild(lastIndicator);
+        }
+
+        // Hide drop zone indicators
+        function hideDropIndicators() {
+            const indicators = document.querySelectorAll('.canvas-drop-indicator');
+            indicators.forEach(ind => ind.remove());
         }
 
         // Make blocks selectable
@@ -13048,6 +13261,7 @@
         function showBlockProperties(el) {
             const propsContainer = document.getElementById('canvas-properties');
             const label = el.getAttribute('data-block-label') || 'Block';
+            const blockType = el.getAttribute('data-block-type') || '';
 
             let propsHTML = `
                 <div class="canvas-prop-section">
@@ -13080,6 +13294,14 @@
                 </div>
             `;
 
+            // Margin
+            propsHTML += `
+                <div class="canvas-prop-group">
+                    <label>Margin</label>
+                    <input type="text" class="canvas-prop-input" value="${el.style.margin || '0'}" onchange="updateBlockStyle('margin', this.value)">
+                </div>
+            `;
+
             // Min Height (for sections)
             if (el.tagName.toLowerCase() === 'section') {
                 propsHTML += `
@@ -13090,6 +13312,14 @@
                 `;
             }
 
+            // Border Radius
+            propsHTML += `
+                <div class="canvas-prop-group">
+                    <label>Border Radius</label>
+                    <input type="text" class="canvas-prop-input" value="${el.style.borderRadius || '0'}" onchange="updateBlockStyle('borderRadius', this.value)">
+                </div>
+            `;
+
             propsHTML += `</div>`;
 
             // Layout section
@@ -13099,10 +13329,78 @@
                     <div class="canvas-prop-group">
                         <label>Text Align</label>
                         <select class="canvas-prop-select" onchange="updateBlockStyle('textAlign', this.value)">
-                            <option value="left">Left</option>
+                            <option value="left" ${getComputedStyle(el).textAlign === 'left' ? 'selected' : ''}>Left</option>
                             <option value="center" ${getComputedStyle(el).textAlign === 'center' ? 'selected' : ''}>Center</option>
-                            <option value="right">Right</option>
+                            <option value="right" ${getComputedStyle(el).textAlign === 'right' ? 'selected' : ''}>Right</option>
                         </select>
+                    </div>
+                    <div class="canvas-prop-group">
+                        <label>Display</label>
+                        <select class="canvas-prop-select" onchange="updateBlockStyle('display', this.value)">
+                            <option value="block" ${getComputedStyle(el).display === 'block' ? 'selected' : ''}>Block</option>
+                            <option value="flex" ${getComputedStyle(el).display === 'flex' ? 'selected' : ''}>Flex</option>
+                            <option value="grid" ${getComputedStyle(el).display === 'grid' ? 'selected' : ''}>Grid</option>
+                            <option value="none" ${getComputedStyle(el).display === 'none' ? 'selected' : ''}>Hidden</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+
+            // Grid/Columns specific properties
+            if (blockType === 'grid' || blockType === 'columns') {
+                propsHTML += `
+                    <div class="canvas-prop-section">
+                        <div class="canvas-prop-section-title">Grid Settings</div>
+                        <div class="canvas-prop-group">
+                            <label>Columns</label>
+                            <select class="canvas-prop-select" onchange="updateGridColumns(this.value)">
+                                <option value="2" ${el.style.gridTemplateColumns?.includes('2') ? 'selected' : ''}>2 Columns</option>
+                                <option value="3" ${el.style.gridTemplateColumns?.includes('3') ? 'selected' : ''}>3 Columns</option>
+                                <option value="4" ${el.style.gridTemplateColumns?.includes('4') ? 'selected' : ''}>4 Columns</option>
+                            </select>
+                        </div>
+                        <div class="canvas-prop-group">
+                            <label>Gap</label>
+                            <input type="text" class="canvas-prop-input" value="${el.style.gap || '1rem'}" onchange="updateBlockStyle('gap', this.value)">
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Spacer specific properties
+            if (blockType === 'spacer') {
+                propsHTML += `
+                    <div class="canvas-prop-section">
+                        <div class="canvas-prop-section-title">Spacer Settings</div>
+                        <div class="canvas-prop-group">
+                            <label>Height</label>
+                            <input type="range" min="10" max="200" value="${parseInt(el.style.height) || 60}"
+                                   oninput="updateBlockStyle('height', this.value + 'px'); this.nextElementSibling.textContent = this.value + 'px'">
+                            <span style="color: #94a3b8; font-size: 12px;">${el.style.height || '60px'}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Layer & Order section
+            propsHTML += `
+                <div class="canvas-prop-section">
+                    <div class="canvas-prop-section-title">Layer & Order</div>
+                    <div class="canvas-prop-group" style="display: flex; gap: 8px;">
+                        <button class="canvas-toolbar-btn" style="flex: 1; justify-content: center;" onclick="moveBlockUp()" title="Move Up (Arrow Up)">
+                            &#8593; Up
+                        </button>
+                        <button class="canvas-toolbar-btn" style="flex: 1; justify-content: center;" onclick="moveBlockDown()" title="Move Down (Arrow Down)">
+                            &#8595; Down
+                        </button>
+                    </div>
+                    <div class="canvas-prop-group" style="display: flex; gap: 8px;">
+                        <button class="canvas-toolbar-btn" style="flex: 1; justify-content: center; font-size: 11px;" onclick="bringBlockToFront()" title="Bring to Front">
+                            &#8607; Front
+                        </button>
+                        <button class="canvas-toolbar-btn" style="flex: 1; justify-content: center; font-size: 11px;" onclick="sendBlockToBack()" title="Send to Back">
+                            &#8609; Back
+                        </button>
                     </div>
                 </div>
             `;
@@ -13111,20 +13409,48 @@
             propsHTML += `
                 <div class="canvas-prop-section">
                     <div class="canvas-prop-section-title">Actions</div>
-                    <div class="canvas-prop-group">
-                        <button class="canvas-toolbar-btn" style="width: 100%; justify-content: center;" onclick="duplicateBlock()">
-                            Duplicate Block
+                    <div class="canvas-prop-group" style="display: flex; gap: 8px;">
+                        <button class="canvas-toolbar-btn" style="flex: 1; justify-content: center;" onclick="copyBlock()" title="Copy (Ctrl+C)">
+                            &#128203; Copy
+                        </button>
+                        <button class="canvas-toolbar-btn" style="flex: 1; justify-content: center;" onclick="duplicateBlock()" title="Duplicate (Ctrl+D)">
+                            &#128451; Duplicate
                         </button>
                     </div>
                     <div class="canvas-prop-group">
-                        <button class="canvas-toolbar-btn" style="width: 100%; justify-content: center; color: #ef4444;" onclick="deleteBlock()">
-                            Delete Block
+                        <button class="canvas-toolbar-btn" style="width: 100%; justify-content: center; color: #ef4444;" onclick="deleteBlock()" title="Delete (Delete/Backspace)">
+                            &#128465; Delete Block
                         </button>
                     </div>
                 </div>
             `;
 
+            // Keyboard shortcuts help
+            propsHTML += `
+                <div class="canvas-prop-section" style="border-top: 1px solid #0f3460; margin-top: 12px; padding-top: 12px;">
+                    <div class="canvas-prop-section-title">Keyboard Shortcuts</div>
+                    <div style="color: #64748b; font-size: 11px; line-height: 1.8;">
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Ctrl+Z</kbd> Undo</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Ctrl+Shift+Z</kbd> Redo</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Ctrl+C</kbd> Copy</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Ctrl+V</kbd> Paste</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Ctrl+D</kbd> Duplicate</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Del</kbd> Delete</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">&#8593;&#8595;</kbd> Move Up/Down</div>
+                        <div><kbd style="background:#0f3460;padding:2px 5px;border-radius:3px;">Esc</kbd> Deselect</div>
+                    </div>
+                </div>
+            `;
+
             propsContainer.innerHTML = propsHTML;
+        }
+
+        // Update grid columns
+        function updateGridColumns(cols) {
+            if (canvasSelectedBlock) {
+                canvasSelectedBlock.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                saveCanvasState();
+            }
         }
 
         // Update block style
@@ -13190,11 +13516,16 @@
             blockItems.forEach(item => {
                 item.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('block-type', item.getAttribute('data-block-type'));
+                    e.dataTransfer.effectAllowed = 'copy';
                     item.classList.add('dragging');
+
+                    // Show drop zones in canvas
+                    setTimeout(() => showPaletteDropZones(), 0);
                 });
 
                 item.addEventListener('dragend', () => {
                     item.classList.remove('dragging');
+                    hidePaletteDropZones();
                 });
             });
 
@@ -13204,6 +13535,15 @@
             canvasFrame.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'copy';
+
+                // Highlight nearest drop zone
+                highlightNearestDropZone(e.clientY);
+            });
+
+            canvasFrame.addEventListener('dragleave', (e) => {
+                // Remove highlights when leaving canvas
+                const dropZones = document.querySelectorAll('.canvas-palette-drop-zone');
+                dropZones.forEach(zone => zone.classList.remove('active'));
             });
 
             canvasFrame.addEventListener('drop', (e) => {
@@ -13211,9 +13551,87 @@
                 const blockType = e.dataTransfer.getData('block-type');
 
                 if (blockType && canvasBlockTypes[blockType]) {
-                    addBlockToCanvas(blockType, e.target);
+                    // Find the active drop zone or nearest block
+                    const activeZone = document.querySelector('.canvas-palette-drop-zone.active');
+                    const targetBlock = activeZone ? activeZone.nextElementSibling : findNearestBlock(e.clientY);
+
+                    addBlockToCanvas(blockType, targetBlock);
+                    hidePaletteDropZones();
                 }
             });
+        }
+
+        // Show drop zones for palette drag
+        function showPaletteDropZones() {
+            const frame = document.getElementById('canvas-frame');
+            const blocks = frame.querySelectorAll('[data-canvas-block]');
+
+            // Remove existing drop zones
+            hidePaletteDropZones();
+
+            // Add drop zone at the beginning
+            const firstZone = document.createElement('div');
+            firstZone.className = 'canvas-palette-drop-zone';
+            firstZone.innerHTML = '<span>&#43; Insert here</span>';
+            frame.prepend(firstZone);
+
+            // Add drop zone after each block
+            blocks.forEach(block => {
+                const zone = document.createElement('div');
+                zone.className = 'canvas-palette-drop-zone';
+                zone.innerHTML = '<span>&#43; Insert here</span>';
+                block.after(zone);
+            });
+        }
+
+        // Hide drop zones for palette drag
+        function hidePaletteDropZones() {
+            const zones = document.querySelectorAll('.canvas-palette-drop-zone');
+            zones.forEach(zone => zone.remove());
+        }
+
+        // Highlight the nearest drop zone based on mouse Y position
+        function highlightNearestDropZone(mouseY) {
+            const dropZones = document.querySelectorAll('.canvas-palette-drop-zone');
+            let nearestZone = null;
+            let nearestDistance = Infinity;
+
+            dropZones.forEach(zone => {
+                zone.classList.remove('active');
+                const rect = zone.getBoundingClientRect();
+                const zoneY = rect.top + rect.height / 2;
+                const distance = Math.abs(mouseY - zoneY);
+
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestZone = zone;
+                }
+            });
+
+            if (nearestZone && nearestDistance < 100) {
+                nearestZone.classList.add('active');
+            }
+        }
+
+        // Find the nearest block to insert before/after
+        function findNearestBlock(mouseY) {
+            const frame = document.getElementById('canvas-frame');
+            const blocks = frame.querySelectorAll('[data-canvas-block]');
+            let nearestBlock = null;
+            let nearestDistance = Infinity;
+
+            blocks.forEach(block => {
+                const rect = block.getBoundingClientRect();
+                const blockY = rect.top + rect.height / 2;
+                const distance = Math.abs(mouseY - blockY);
+
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestBlock = block;
+                }
+            });
+
+            return nearestBlock;
         }
 
         // Add block to canvas
@@ -13222,7 +13640,7 @@
             if (!blockDef) return;
 
             const wrapper = document.createElement('div');
-            wrapper.innerHTML = blockDef.defaultContent;
+            wrapper.innerHTML = blockDef.defaultContent.trim();
             const newBlock = wrapper.firstElementChild;
 
             const blockId = 'block-' + Date.now();
@@ -13236,20 +13654,30 @@
                 selectCanvasBlock(newBlock);
             });
 
-            // Find appropriate insert location
             const canvasFrame = document.getElementById('canvas-frame');
-            const sections = canvasFrame.querySelectorAll('section');
 
-            if (sections.length > 0) {
-                // Insert after the last section
-                sections[sections.length - 1].after(newBlock);
+            // Insert at the appropriate location
+            if (targetElement && targetElement.hasAttribute && targetElement.hasAttribute('data-canvas-block')) {
+                // Insert before the target element
+                targetElement.before(newBlock);
+            } else if (targetElement && targetElement.closest && targetElement.closest('[data-canvas-block]')) {
+                // If dropped on a child element, insert before the parent block
+                const parentBlock = targetElement.closest('[data-canvas-block]');
+                parentBlock.before(newBlock);
+            } else if (canvasSelectedBlock) {
+                // Insert after currently selected block
+                canvasSelectedBlock.after(newBlock);
             } else {
+                // Append to the end of canvas
                 canvasFrame.appendChild(newBlock);
             }
 
             // Select the new block
             selectCanvasBlock(newBlock);
             saveCanvasState();
+
+            // Re-initialize sortable after adding new block
+            initializeCanvasSortable();
 
             ceShowToast(`Added ${blockDef.name}`, 'success');
         }
@@ -13401,6 +13829,237 @@
 
             ceShowToast('Changes saved!', 'success');
         }
+
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+
+        let canvasCopiedBlock = null; // Store copied block HTML
+
+        document.addEventListener('keydown', function(e) {
+            const canvasEditor = document.getElementById('canvas-editor-container');
+            if (!canvasEditor || !canvasEditor.classList.contains('active')) return;
+
+            // Don't trigger shortcuts when editing text
+            const activeEl = document.activeElement;
+            if (activeEl && (activeEl.isContentEditable || activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+                // Only allow Escape to exit
+                if (e.key === 'Escape') {
+                    activeEl.blur();
+                    e.preventDefault();
+                }
+                return;
+            }
+
+            // Ctrl/Cmd + Z = Undo
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                canvasUndo();
+            }
+
+            // Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y = Redo
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'Z' || e.key === 'y')) {
+                e.preventDefault();
+                canvasRedo();
+            }
+
+            // Delete or Backspace = Delete selected block
+            if ((e.key === 'Delete' || e.key === 'Backspace') && canvasSelectedBlock) {
+                e.preventDefault();
+                deleteBlock();
+            }
+
+            // Ctrl/Cmd + D = Duplicate
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd' && canvasSelectedBlock) {
+                e.preventDefault();
+                duplicateBlock();
+            }
+
+            // Ctrl/Cmd + C = Copy
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c' && canvasSelectedBlock) {
+                e.preventDefault();
+                copyBlock();
+            }
+
+            // Ctrl/Cmd + V = Paste
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v' && canvasCopiedBlock) {
+                e.preventDefault();
+                pasteBlock();
+            }
+
+            // Ctrl/Cmd + X = Cut
+            if ((e.ctrlKey || e.metaKey) && e.key === 'x' && canvasSelectedBlock) {
+                e.preventDefault();
+                cutBlock();
+            }
+
+            // Escape = Deselect block or close canvas editor
+            if (e.key === 'Escape') {
+                if (canvasSelectedBlock) {
+                    deselectCanvasBlock();
+                } else {
+                    closeCanvasEditor();
+                }
+            }
+
+            // Arrow keys = Move block (with selected block)
+            if (canvasSelectedBlock && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                e.preventDefault();
+                if (e.key === 'ArrowUp') {
+                    moveBlockUp();
+                } else {
+                    moveBlockDown();
+                }
+            }
+
+            // Bracket keys for layer control (with selected block)
+            if (canvasSelectedBlock) {
+                // [ = Send backward
+                if (e.key === '[' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    sendBlockBackward();
+                }
+                // ] = Bring forward
+                if (e.key === ']' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    bringBlockForward();
+                }
+            }
+        });
+
+        // ============================================
+        // COPY / PASTE / CUT FUNCTIONALITY
+        // ============================================
+
+        function copyBlock() {
+            if (!canvasSelectedBlock) return;
+            canvasCopiedBlock = canvasSelectedBlock.cloneNode(true);
+            ceShowToast('Block copied', 'success');
+        }
+
+        function cutBlock() {
+            if (!canvasSelectedBlock) return;
+            canvasCopiedBlock = canvasSelectedBlock.cloneNode(true);
+            canvasSelectedBlock.remove();
+            canvasSelectedBlock = null;
+            resetPropertiesPanel();
+            saveCanvasState();
+            ceShowToast('Block cut', 'success');
+        }
+
+        function pasteBlock() {
+            if (!canvasCopiedBlock) return;
+
+            const clone = canvasCopiedBlock.cloneNode(true);
+            const blockId = 'block-' + Date.now();
+            clone.setAttribute('data-canvas-block', blockId);
+            clone.classList.remove('selected');
+
+            clone.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectCanvasBlock(clone);
+            });
+
+            const canvasFrame = document.getElementById('canvas-frame');
+
+            // Insert after selected block or at the end
+            if (canvasSelectedBlock) {
+                canvasSelectedBlock.after(clone);
+            } else {
+                canvasFrame.appendChild(clone);
+            }
+
+            selectCanvasBlock(clone);
+            saveCanvasState();
+            ceShowToast('Block pasted', 'success');
+        }
+
+        // ============================================
+        // BLOCK MOVEMENT / LAYER CONTROLS
+        // ============================================
+
+        function moveBlockUp() {
+            if (!canvasSelectedBlock) return;
+            const prev = canvasSelectedBlock.previousElementSibling;
+            if (prev && prev.hasAttribute('data-canvas-block')) {
+                prev.before(canvasSelectedBlock);
+                saveCanvasState();
+                ceShowToast('Block moved up', 'success');
+            }
+        }
+
+        function moveBlockDown() {
+            if (!canvasSelectedBlock) return;
+            const next = canvasSelectedBlock.nextElementSibling;
+            if (next && next.hasAttribute('data-canvas-block')) {
+                next.after(canvasSelectedBlock);
+                saveCanvasState();
+                ceShowToast('Block moved down', 'success');
+            }
+        }
+
+        function bringBlockForward() {
+            if (!canvasSelectedBlock) return;
+            const currentZ = parseInt(canvasSelectedBlock.style.zIndex) || 0;
+            canvasSelectedBlock.style.zIndex = currentZ + 1;
+            saveCanvasState();
+            ceShowToast('Brought forward', 'success');
+        }
+
+        function sendBlockBackward() {
+            if (!canvasSelectedBlock) return;
+            const currentZ = parseInt(canvasSelectedBlock.style.zIndex) || 0;
+            canvasSelectedBlock.style.zIndex = Math.max(0, currentZ - 1);
+            saveCanvasState();
+            ceShowToast('Sent backward', 'success');
+        }
+
+        function bringBlockToFront() {
+            if (!canvasSelectedBlock) return;
+            canvasSelectedBlock.style.zIndex = 999;
+            saveCanvasState();
+            ceShowToast('Brought to front', 'success');
+        }
+
+        function sendBlockToBack() {
+            if (!canvasSelectedBlock) return;
+            canvasSelectedBlock.style.zIndex = 0;
+            saveCanvasState();
+            ceShowToast('Sent to back', 'success');
+        }
+
+        // ============================================
+        // DESELECT BLOCK
+        // ============================================
+
+        function deselectCanvasBlock() {
+            if (canvasSelectedBlock) {
+                canvasSelectedBlock.classList.remove('selected');
+                canvasSelectedBlock = null;
+                resetPropertiesPanel();
+            }
+        }
+
+        function resetPropertiesPanel() {
+            document.getElementById('canvas-properties').innerHTML = `
+                <div class="canvas-empty-props">
+                    <div class="icon">&#128073;</div>
+                    <p>Select a block to edit its properties</p>
+                </div>
+            `;
+        }
+
+        // Click on canvas frame background to deselect
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvasFrame = document.getElementById('canvas-frame');
+            if (canvasFrame) {
+                canvasFrame.addEventListener('click', function(e) {
+                    if (e.target === canvasFrame) {
+                        deselectCanvasBlock();
+                    }
+                });
+            }
+        });
 
         // ============================================
         // CMS FOLDER VIEW - Content Type Browser
