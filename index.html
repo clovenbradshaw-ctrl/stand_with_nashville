@@ -5065,9 +5065,7 @@
                             target: event.record_id,
                             set: event.frame,
                             payload: {
-                                data: {
-                                    [event.operator]: event.payload
-                                },
+                                data: event.payload,
                                 frame: event.frame,
                                 ordinal: event.ordinal,
                                 record_id: event.record_id,
